@@ -1,0 +1,1 @@
+Testes de Unidade são pequenos, rápidos e independentes, com o objetivo de testar pequenas partes do sistema, como um método ou uma classe. Enquanto os Testes de Sistema são testes maiores, mais demorados e com dependencias, e com o objetivo de testar a interação entre as partes de um componente do sistema.
