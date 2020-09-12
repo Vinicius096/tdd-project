@@ -1,0 +1,26 @@
+1. Escreva um teste funcional para alguma funcionalidade a ser implementada
+
+2. Rode o teste funcional
+
+3. Se o teste não passa:
+
+	a. Escreva um teste de unidade para alguma unidade a ser implementada
+
+	b. Rode o teste de unidade
+
+	c. Se o teste não passa:
+
+		I. Escreva/atualize o código da unidade testada
+
+		II. Retorne ao passo 3.b
+
+	d. Se o teste passa:
+
+		I. Se o teste precisar de refatoração, retorne ao passo 3.a.I
+		II. Se o teste não precisar de refatoração, retorne ao passo 2
+
+4. Se o teste passa:
+
+	a. Se a aplicação precisar de refatoração, retorne ao passo 2
+	b. Se a aplicação não precisar de refatoração, retorne ao passo 1
+
