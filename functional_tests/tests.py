@@ -26,7 +26,7 @@ class NewVisitorTest(LiveServerTestCase):
 					raise e
 				time.sleep(0.5)
 
-	def test_can_start_a_list_and_retrieve_it_later(self):
+	def test_can_start_a_list_for_one_user(self):
 		
 		# Maria decidiu utilizar o novo app TO-DO. Ela entra em sua página principal:
 		self.browser.get(self.live_server_url)
@@ -64,3 +64,44 @@ class NewVisitorTest(LiveServerTestCase):
 		# Ela visita a URL: a sua lista TODO ainda está armazenada
 
 		# Satisfeita, ela vai dormir
+
+	def test_multiple_users_can_start_lists_at_different_urls(self):
+
+		#Maria começa uma nova lista
+		self.browser.get(self.live_server_url)
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Estudar testes funcionais')
+		inputbox.send_keys(Keys.ENTER)
+		self.wait_for_row_in_list_table('1: Estudar testes funcionais')
+
+		#Ela nota que sua lista possui uma url unica
+		maria_list_url = self.browser.current_url
+		self.assertRegex(maria_list_url, '/lists/.+')
+
+		#Agora um novo usuario, Joao, entra no site
+		self.browser.quit()
+		sel.browser = webdriver.Firefox()
+
+		#Joao visita a pagina inicial, não existe nenhum sinal de Maria
+		self.browser.get(self.live_server_url)
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('1: Estudar testes funcionais', page_text)
+		self.assertNotIn('2: Estudar testes de unidade', page_text)
+
+		#Joao inicia uma nova lista
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys('Comprar leite')
+		inputbox.send_keys(Keys.ENTER)
+		self.wait_for_row_in_list_table('1: Comprar leite')
+
+		#Joao pega sua url unica
+		joao_list_url = self.browser.current_url
+		self.assertRegex(joao_list_url, '/lists/.+')
+		self.assertNotEqual(joao_list_url, maria_list_url)
+
+		#Novamente, não existe sinal de Maria na lista
+		page_text = self.browser.find_element_by_tag_name('body').text
+		self.assertNotIn('Estudar testes funcionais', page_text)
+		self.assertIn('Comprar leite', page_text)
+
+		#Satisfeitos ambos vão dormir
