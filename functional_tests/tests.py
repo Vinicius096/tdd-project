@@ -80,7 +80,7 @@ class NewVisitorTest(LiveServerTestCase):
 
 		#Agora um novo usuario, Joao, entra no site
 		self.browser.quit()
-		sel.browser = webdriver.Firefox()
+		self.browser = webdriver.Firefox()
 
 		#Joao visita a pagina inicial, não existe nenhum sinal de Maria
 		self.browser.get(self.live_server_url)
@@ -105,3 +105,24 @@ class NewVisitorTest(LiveServerTestCase):
 		self.assertIn('Comprar leite', page_text)
 
 		#Satisfeitos ambos vão dormir
+
+	def test_layout_and_styling(self):
+
+		# Edith entra na home page
+		self.browser.get(self.live_server_url)
+		self.browser.set_window_size(1024, 768)
+
+		# Ela nota que o input box está centralizado
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		self.assertAlmostEqual(
+			inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=10
+		)
+
+		# Ela inicia uma nova lista e nota que o input está centralizado
+		inputbox.send_keys('testeing')
+		inputbox.send_keys(Keys.ENTER)
+		self.wait_for_row_in_list_table('1: testing')
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		self.assertAlmostEqual(
+			inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=10
+		)
